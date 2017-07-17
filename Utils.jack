@@ -1,0 +1,15 @@
+class Utils {
+	/** 
+	* Get the value of a particular bit from an integer at bitPosition
+	*/
+	function int bitAt(int number, int bitPosition) {
+		var int reminder;
+		var int i;
+		while(bitPosition > -1) {
+			let reminder = number - (2 * (number / 2));
+			let number = number / 2;
+			let bitPosition = bitPosition - 1;
+		}
+		return reminder;
+	}
+}

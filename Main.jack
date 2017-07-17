@@ -1,0 +1,83 @@
+/**
+* Elementary (1D) cellular automata (automaton) animation on the Hack machine. 
+* If you want to learn more about CA check the next links:
+* 		http://mathworld.wolfram.com/ElementaryCellularAutomaton.html
+* 		https://en.wikipedia.org/wiki/Cellular_automaton
+* The Hack machine and the Jack language are described in:
+* 		"The Elements of Computing Systems" by Noam Nisan and Shimon Schocken
+*/
+class Main {
+	function void main() {
+		var int rule;
+		var bool running;
+
+		let running = true;
+
+		// Show the intial menu and let the user pick a rule for the CA generation
+		while(running) {
+			do Output.printString("Celluar Automata demo:"); 
+			do Output.println();
+			do Output.printString("Pick a number from 0 to 255 to see the generated animation.");
+			do Output.println();
+			do Output.printString("Interesting patterns: 25, 50, 54, 60, 65, 110, 150, 182.");
+			do Output.println();
+			do Output.printString("Press ESC or Q to stop the CA animation.");
+			do Output.println();
+
+			let rule = Keyboard.readInt("Use 256 to exit or pick a rule from 0 to 255: ");
+
+			if(rule = 256) {
+				let running = false;
+			} else {
+				do Screen.clearScreen();
+				do Output.moveCursor(0, 0);		
+
+				do Main.CAScreen(rule);
+			}
+
+			do Screen.clearScreen();
+			do Output.moveCursor(0, 0);			
+		}
+
+		do Output.printString("Program ended."); 
+		do Sys.halt();
+		return;
+	}
+
+	// Fill the screen with successive CA generations
+	function void CAScreen(int rule) {
+		var boolean running;
+		var char key;
+		var int ypos;
+		var CA row;
+
+		let running = true;
+		let key = 0;
+		let ypos = 0;
+
+		let row = CA.new(rule);
+
+		while(running) {
+			while(key = 0) {
+				let key = Keyboard.keyPressed();
+
+				let ypos = 0;
+				while(ypos < 256) {
+					do row.draw(ypos);
+					do row.update();
+					let ypos = ypos + 16;
+				}
+
+				do Sys.wait(50);
+			}
+
+			// If key is ESC or Q exit and return to the initial screen
+			if((key = 81) | (key = 140)) {
+				let running = false;
+			}
+		}
+
+		do row.dispose();
+		return; 
+	}
+}

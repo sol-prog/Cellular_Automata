@@ -1,0 +1,145 @@
+/**
+* Elementary (1D) cellular automata (automaton). If you want to learn more check the next links:
+* http://mathworld.wolfram.com/ElementaryCellularAutomaton.html
+* https://en.wikipedia.org/wiki/Cellular_automaton
+*/
+class CA {
+	field Array ruleset;
+	field Array row, row_history;
+	field int row_size, ruleset_size, row_size;
+
+	constructor CA new(int rule) {		
+		var int i;
+
+		let ruleset_size = 8;
+		let row_size = 32;
+
+		let ruleset = Array.new(ruleset_size);		
+		let row = Array.new(row_size);
+		let row_history = Array.new(row_size);
+
+		do reset(rule);
+
+		return this;
+	}
+
+	/**
+	* Fill the ruleset array and initialize the first generation
+	*/
+	method void reset(int rule) {
+		var int i;
+
+		let i = 0;
+		while(i < ruleset_size) {
+			let ruleset[i] = Utils.bitAt(rule, i);
+			let i = i + 1;
+		}
+
+
+		let i = 0;
+		while(i < row_size) {
+			let row[i] = 0;
+			let i = i + 1;
+		}	
+		
+		// We intialize the cell in the middle of the row to 1
+		let row[row_size / 2] = 1;
+
+		return;
+	}
+
+	/**
+	* Update the CA, use the ruleset to define a new generation
+	*/
+	method void update() {
+		var int pos;
+		var int score;
+
+		let pos = 0;
+		while(pos < row_size) {
+			let row_history[pos] = row[pos];
+			let pos = pos + 1;
+		}
+
+		let pos = 1;
+		// Wrap around at the edges (periodic boundary conditions)
+		while(pos < row_size) {
+			if(pos = 0) {
+				let score = (4 * row_history[31]) + (2 * row_history[pos]) + (1 * row_history[(pos + 1)]);	
+				let row[pos] = ruleset[score];
+			}
+			else {
+				if(pos = 31) {
+					let score = (4 * row_history[(pos - 1)]) + (2 * row_history[pos]) + (1 * row_history[0]);
+					let row[pos] = ruleset[score];
+				} else {
+					let score = (4 * row_history[(pos - 1)]) + (2 * row_history[pos]) + (1 * row_history[(pos + 1)]);
+					let row[pos] = ruleset[score];
+				}
+			}
+			let pos = pos + 1;
+		}
+		return;
+	}
+
+	/**
+	* Print the values of the current generation (used for debugging purposes)
+	*/
+	method void print() {
+		var int pos;
+		let pos = 0;
+
+		while(pos < row_size ) {
+			do Output.printInt(row[pos]);
+			let pos = pos + 1;
+		}
+		do Output.println();
+		return;
+	}
+
+	/**
+	* Draw the current CA generation at position y on the screen
+	* The monochrome screen of the Hack machine has a fixed resolution of 512 x 256
+	* this is why I've used hard coded numbers in the draw loop
+	*/
+	method void draw(int y) {
+		var int x, y, pos;
+
+		let x = 0;
+		let pos = 0;
+		while(x < 512) {
+			do setColor(pos);
+			if((x = 496) | (y = 240))   {
+					do Screen.drawRectangle(x, y, (x + 15), (y + 15));
+				} else {
+					do Screen.drawRectangle(x, y, (x + 16), (y + 16));		
+				}			
+			let x = x + 16;
+			let pos = pos + 1;
+		}
+
+		return;
+	}
+
+	/**
+	* Change the color based on cell state
+	*/
+	method void setColor(int pos) {
+		if(row[pos] = 1) {
+			do Screen.setColor(true);
+		} else {
+			do Screen.setColor(false);
+		}
+		return;
+	}
+
+	/**
+	* Clear the memory used by the CA
+	*/
+	method void dispose() {
+		do ruleset.dispose();
+		do row.dispose();
+		do row_history.dispose();
+		return;
+	}
+}
