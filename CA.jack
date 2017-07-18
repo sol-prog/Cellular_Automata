@@ -6,7 +6,7 @@
 class CA {
 	field Array ruleset;
 	field Array row, row_history;
-	field int row_size, ruleset_size, row_size;
+	field int row_size, ruleset_size;
 
 	constructor CA new(int rule) {		
 		var int i;
