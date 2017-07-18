@@ -9,7 +9,7 @@
 class Main {
 	function void main() {
 		var int rule;
-		var bool running;
+		var boolean running;
 
 		let running = true;
 
