@@ -10,21 +10,30 @@ class Main {
 	function void main() {
 		var int rule;
 		var boolean running;
+		var String message_0, message_1, message_2, message_3, message_4, message_5;
+
+		let message_0 = "Celluar Automata demo:";
+		let message_1 = "Pick a number from 0 to 255 to see the generated animation.";
+		let message_2 = "Interesting patterns: 25, 50, 54, 60, 65, 110, 150, 182.";
+		let message_3 = "Press ESC or Q to stop the CA animation.";
+		let message_4 = "Use 256 to exit or pick a rule from 0 to 255: ";
+		let message_5 = "Program ended.";
 
 		let running = true;
 
+
 		// Show the intial menu and let the user pick a rule for the CA generation
 		while(running) {
-			do Output.printString("Celluar Automata demo:"); 
+			do Output.printString(message_0); 
 			do Output.println();
-			do Output.printString("Pick a number from 0 to 255 to see the generated animation.");
+			do Output.printString(message_1);
 			do Output.println();
-			do Output.printString("Interesting patterns: 25, 50, 54, 60, 65, 110, 150, 182.");
+			do Output.printString(message_2);
 			do Output.println();
-			do Output.printString("Press ESC or Q to stop the CA animation.");
+			do Output.printString(message_3);
 			do Output.println();
 
-			let rule = Keyboard.readInt("Use 256 to exit or pick a rule from 0 to 255: ");
+			let rule = Keyboard.readInt(message_4);
 
 			if(rule = 256) {
 				let running = false;
@@ -39,7 +48,15 @@ class Main {
 			do Output.moveCursor(0, 0);			
 		}
 
-		do Output.printString("Program ended."); 
+		do Output.printString(message_5);
+
+		do message_0.dispose();
+		do message_1.dispose();
+		do message_2.dispose();
+		do message_3.dispose();
+		do message_4.dispose();
+		do message_5.dispose();
+
 		do Sys.halt();
 		return;
 	}
